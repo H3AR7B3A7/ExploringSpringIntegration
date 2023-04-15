@@ -11,10 +11,12 @@ import org.springframework.stereotype.Component;
 @Configuration
 public class CamelFileFlowConfiguration {
 
-    private final FileProcessor fileProcessor;
+    private final FileNameProcessor fileNameProcessor;
+    private final FileContentProcessor fileContentProcessor;
 
-    public CamelFileFlowConfiguration(FileProcessor fileProcessor) {
-        this.fileProcessor = fileProcessor;
+    public CamelFileFlowConfiguration(FileNameProcessor fileNameProcessor, FileContentProcessor fileContentProcessor) {
+        this.fileNameProcessor = fileNameProcessor;
+        this.fileContentProcessor = fileContentProcessor;
     }
 
     @Bean
@@ -46,7 +48,8 @@ public class CamelFileFlowConfiguration {
 
                 from("direct:process")
                         .routeId("camel-process")
-                        .process(fileProcessor)
+                        .process(fileNameProcessor)
+                        .process(fileContentProcessor)
                         .to("direct:out");
 
                 from("direct:out")
@@ -57,10 +60,25 @@ public class CamelFileFlowConfiguration {
     }
 
     @Component
-    static class FileProcessor implements Processor {
+    static class FileNameProcessor implements Processor {
         @Override
         public void process(Exchange exchange) {
-            exchange.getIn().setHeader("CamelFileName", "new_" + exchange.getIn().getHeader("CamelFileName"));
+            exchange.getIn()
+                    .setHeader("CamelFileName", "new_" + exchange
+                            .getIn()
+                            .getHeader("CamelFileName"));
+        }
+    }
+
+    @Component
+    static class FileContentProcessor implements Processor {
+        @Override
+        public void process(Exchange exchange) {
+            exchange.getIn()
+                    .setBody(exchange
+                            .getIn()
+                            .getBody(String.class)
+                            .toUpperCase());
         }
     }
 }
