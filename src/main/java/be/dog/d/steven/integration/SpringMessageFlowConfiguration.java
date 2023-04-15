@@ -13,7 +13,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import java.time.Instant;
 
 @Configuration
-public class MessageFlowConfiguration {
+public class SpringMessageFlowConfiguration {
 
     @Bean
     MessageChannel messageChannel() {

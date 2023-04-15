@@ -8,13 +8,22 @@ group = 'be.dog.d.steven'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
+def camelVersion = '4.0.0-M2'
+
 repositories {
     mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.apache.camel.springboot:camel-spring-boot-bom:${camelVersion}"
+    }
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-integration'
     implementation 'org.springframework.integration:spring-integration-file'
+    implementation 'org.apache.camel.springboot:camel-spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.integration:spring-integration-test'
 }

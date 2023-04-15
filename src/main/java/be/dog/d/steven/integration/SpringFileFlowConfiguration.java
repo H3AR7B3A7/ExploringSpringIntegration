@@ -15,7 +15,7 @@ import org.springframework.util.SystemPropertyUtils;
 import java.io.File;
 
 @Configuration
-public class FileFlowConfiguration {
+public class SpringFileFlowConfiguration {
 
     @Bean
     DirectChannel fileRequests() {
